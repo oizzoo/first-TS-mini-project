@@ -1,5 +1,7 @@
 import CourseGoal from './CourseGoal.tsx'
 import { type CourseGoal as CGoal } from '../App.tsx';
+import InfoBox from './InfoBox.tsx';
+import { ReactNode } from 'react';
 
 type CourseGoalListProps = {
   goals: CGoal[];
@@ -7,7 +9,36 @@ type CourseGoalListProps = {
 };
 
 export default function CourseGoalList({goals, onDeleteGoal}: CourseGoalListProps) {
+
+    if (goals.length === 0) {
+        return <InfoBox mode='hint'>You have no goals yet. Start adding some!</InfoBox>
+    };
+
+    let warningBox: ReactNode;
+
+    if (goals.length === 4) {
+        warningBox = (
+            <InfoBox mode='warning' severity='low'>
+                Warning. You're collecting a lot of goals. Don't put too much on your plate!
+            </InfoBox>
+        );
+    } else if (goals.length === 5) {
+        warningBox = (
+            <InfoBox mode='warning' severity='medium'>
+                Warning. You're collecting a lot of goals. Don't put too much on your plate!
+            </InfoBox>
+        );
+    } else if (goals.length >= 6) {
+        warningBox = (
+            <InfoBox mode='warning' severity='high'>
+                Warning. You're collecting a lot of goals. Don't put too much on your plate!
+            </InfoBox>
+        );
+    }
+
     return (
+        <>
+        {warningBox}
         <ul>
         {goals.map((goal) => (
             <li key={goal.id}>
@@ -21,5 +52,6 @@ export default function CourseGoalList({goals, onDeleteGoal}: CourseGoalListProp
             </li>
         ))}
       </ul>
+      </>
     )
 }
